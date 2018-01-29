@@ -6,3 +6,11 @@ submit_ticket:
 ticket_submission_successful:
     path:     /tickets/submit/success
     defaults: { _controller: AppBundle:Sales:ticketSubmissionSuccessful }
+
+signup:
+    path:     /signup
+    defaults: { _controller: AppBundle:Login:signUp}
+
+login:
+    path:     /login
+    defaults: { _controller: AppBundle:Login:login}
