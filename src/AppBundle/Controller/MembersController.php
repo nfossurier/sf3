@@ -15,10 +15,10 @@ class MembersController extends Controller
 {
     public function signUpAction(Request $request): Response
     {
-        $memberSignUp = new MemberSignUp();
-        $memberSignUp->nickname = $request->request->get('member_nickname');
-        $memberSignUp->email = $request->request->get('member_email');
-        $memberSignUp->password = $request->request->get('member_password');
+        $memberSignUp                       = new MemberSignUp();
+        $memberSignUp->nickname             = $request->request->get('member_nickname');
+        $memberSignUp->email                = $request->request->get('member_email');
+        $memberSignUp->password             = $request->request->get('member_password');
         $memberSignUp->passwordConfirmation = $request->request->get('member_password_confirmation');
 
         if ($request->isMethod('POST')) {
@@ -29,19 +29,7 @@ class MembersController extends Controller
                 return $this->render('@App/Members/member_sign_up.html.twig', ['violations' => $violations]);
             }
 
-            $salt = sha1(sha1(uniqid()));
-            $rawEncodedPassword = $this->get('app.member_password_encoder')->encodePassword(
-                $memberSignUp->password,
-                $salt
-            );
-
-            $member = Member::signUp(
-                new Email($memberSignUp->email),
-                $memberSignUp->nickname,
-                new EncodedPassword($rawEncodedPassword, $salt)
-            );
-
-            $this->get('repositories.member')->save($member);
+            $this->get('repositories.member')->save($this->get('member.factory')->createMember($memberSignUp));
 
             return $this->redirectToRoute('member_sign_up_successful');
         }

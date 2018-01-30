@@ -20,5 +20,9 @@
             <argument>13</argument>
         </service>
 
+        <service id="member.factory" class="Tiquette\Domain\MemberFactory">
+            <argument type="service" id="app.member_password_encoder"/>
+        </service>
+
     </services>
 </container>
