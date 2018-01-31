@@ -18,6 +18,15 @@ class Member
         return new self($email, $nickname, $encodedPassword);
     }
 
+    public static function fromArray(array $data): self
+    {
+        return new self(
+            $data['email'],
+            $data['nickname'],
+            new EncodedPassword($data['encoded_password'], $data['password_salt'])
+        );
+    }
+
     public function getEmail(): Email
     {
         return $this->email;

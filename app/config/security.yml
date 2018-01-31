@@ -13,6 +13,10 @@ security:
                     nathan:
                         password: nathanpass
                         roles: 'ROLE_ADMIN'
+        user_db:
+            entity:
+                class: Tiquette\Utils\Ensure
+                property: nickname
 
     firewalls:
         # disables authentication for assets and the profiler, adapt it according to your needs
@@ -26,7 +30,7 @@ security:
 
             # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
             http_basic:
-                provider: in_memory
+                provider: user_db
 
             # https://symfony.com/doc/current/security/form_login_setup.html
             #form_login: ~
