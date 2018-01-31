@@ -17,7 +17,7 @@ class Member
 
     public static function signUp(Email $email, string $nickname, EncodedPassword $encodedPassword): self
     {
-        return new self(MemberId::generate(), $email, $nickname, $encodedPassword, ['ROLE_USER']);
+        return new self(UniqId::generate(), $email, $nickname, $encodedPassword, ['ROLE_USER']);
     }
 
     public function promoteAdmin(): void
@@ -32,7 +32,7 @@ class Member
         }
     }
 
-    public function getId(): MemberId
+    public function getId(): UniqId
     {
         return $this->id;
     }
@@ -57,7 +57,7 @@ class Member
         return $this->roles;
     }
 
-    private function __construct(MemberId $memberId, Email $email, string $nickname, EncodedPassword $encodedPassword, array $roles)
+    private function __construct(UniqId $memberId, Email $email, string $nickname, EncodedPassword $encodedPassword, array $roles)
     {
         Ensure::string($nickname);
         Ensure::minLength($nickname, 1);
@@ -76,7 +76,7 @@ class Member
     public static function fromArray(array $data): self
     {
         return new self(
-            MemberId::fromString($data['uuid']),
+            UniqId::fromString($data['uuid']),
             new Email($data['email']),
             $data['nickname'],
             new EncodedPassword($data['encoded_password'], $data['password_salt']),

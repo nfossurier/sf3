@@ -4,6 +4,6 @@
 
 {% block body %}
     {% for ticket in tickets %}
-        <li>{{ ticket.eventName }}</li>
+        <li><a href="{{ path('ticket_page', {'ticketId': ticket.id.__toString}) }}">{{ ticket.eventName }}</a></li>
     {% endfor %}
 {% endblock %}

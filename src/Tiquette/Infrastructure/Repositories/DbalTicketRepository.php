@@ -6,7 +6,9 @@
 namespace Tiquette\Infrastructure\Repositories;
 
 use Doctrine\DBAL\Connection;
+use Tiquette\Domain\MemberNotFound;
 use Tiquette\Domain\Ticket;
+use Tiquette\Domain\TicketNotFound;
 use Tiquette\Domain\TicketRepository;
 
 class DbalTicketRepository implements TicketRepository
@@ -21,6 +23,7 @@ class DbalTicketRepository implements TicketRepository
     public function save(Ticket $ticket): void
     {
         $data = [
+            'uuid' => (string) $ticket->getId(),
             'event_name' => $ticket->getEventName(),
             'event_description' => $ticket->getEventDescription(),
             'event_date' => $ticket->getEventDate()->format('Y-m-d\TH:i:00'),
@@ -48,6 +51,24 @@ SQL;
         }
 
         return $tickets;
+    }
+
+    public function findOneById(string $ticketId)
+    {
+        $query =<<<SQL
+SELECT * FROM tickets WHERE uuid = :ticketId LIMIT 1;
+SQL;
+
+        $statement = $this->connection->prepare($query);
+        $statement->execute(['ticketId' => $ticketId]);
+        $row = $statement->fetch(\PDO::FETCH_ASSOC);
+
+        if (!$row) {
+
+            throw TicketNotFound::unknownId($ticketId);
+        }
+
+        return $this->hydrateFromRow($row);
     }
 
     private function hydrateFromRow(array $row): Ticket

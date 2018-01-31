@@ -7,6 +7,7 @@ namespace AppBundle\Utils;
 
 use AppBundle\Forms\TicketSubmission;
 use Tiquette\Domain\Ticket;
+use Tiquette\Domain\UniqId;
 
 class TicketFactory
 {

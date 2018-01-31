@@ -29,7 +29,8 @@ class SalesController extends Controller
             }
         }
 
-        return $this->render('@App/Sales/submit_ticket.html.twig', ['ticketSubmissionForm' => $ticketSubmissionForm->createView()]);
+        return $this->render('@App/Sales/submit_ticket.html.twig',
+            ['ticketSubmissionForm' => $ticketSubmissionForm->createView()]);
     }
 
     public function ticketSubmissionSuccessfulAction(Request $request): Response

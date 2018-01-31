@@ -7,15 +7,24 @@ namespace Tiquette\Domain;
 
 class Ticket
 {
+    private $id;
     private $eventName;
     private $eventDate;
     private $eventDescription;
     private $boughtAtPrice;
 
-    public static function submit(string $eventName, \DateTimeImmutable $eventDate, string $eventDescription,
-        int $boughtAtPrice): self
+    public static function submit(
+        string $eventName,
+        \DateTimeImmutable $eventDate,
+        string $eventDescription,
+        int $boughtAtPrice
+    ): self {
+        return new self(UniqId::generate(), $eventName, $eventDate, $eventDescription, $boughtAtPrice);
+    }
+
+    public function getId(): UniqId
     {
-        return new self($eventName, $eventDate, $eventDescription, $boughtAtPrice);
+        return $this->id;
     }
 
     public function getEventName(): string
@@ -38,12 +47,18 @@ class Ticket
         return $this->boughtAtPrice;
     }
 
-    private function __construct(string $eventName, \DateTimeImmutable $eventDate, string $eventDescription, int $boughtAtPrice)
-    {
-        $this->eventName = $eventName;
-        $this->eventDate = $eventDate;
+    private function __construct(
+        UniqId $ticketId,
+        string $eventName,
+        \DateTimeImmutable $eventDate,
+        string $eventDescription,
+        int $boughtAtPrice
+    ) {
+        $this->id               = $ticketId;
+        $this->eventName        = $eventName;
+        $this->eventDate        = $eventDate;
         $this->eventDescription = $eventDescription;
-        $this->boughtAtPrice = $boughtAtPrice;
+        $this->boughtAtPrice    = $boughtAtPrice;
     }
 
     /**
@@ -53,6 +68,7 @@ class Ticket
     public static function fromArray(array $data): self
     {
         return new self(
+            UniqId::fromString($data['uuid']),
             $data['event_name'],
             \DateTimeImmutable::createFromFormat('Y-m-d H:i:00', $data['event_date']),
             $data['event_description'],

@@ -8,7 +8,7 @@ namespace Tiquette\Domain;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 
-class MemberId
+class UniqId
 {
     private $uuid;
 
