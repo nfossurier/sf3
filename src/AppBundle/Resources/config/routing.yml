@@ -28,8 +28,7 @@ ticket_page:
     path: /tickets/{ticketId}
     defaults: { _controller: AppBundle:Sales:ticket }
 
-#################### ADMIN
+##### ADMIN
 admin.list_all_tickets:
     path: /admin/tickets/all
     defaults: { _controller: AppBundle:Admin\Tickets:listAllTickets }
-
