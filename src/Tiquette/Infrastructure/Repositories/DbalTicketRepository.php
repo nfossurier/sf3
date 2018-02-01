@@ -45,8 +45,8 @@ SQL;
             'event_date' => $ticket->getEventDate()->format('Y-m-d\TH:i:00'),
             'bought_at_price' => $ticket->getBoughtAtPrice()->getAmount(),
             'price_currency' => $ticket->getBoughtAtPrice()->getCurrency(),
-            'submitted_on' => $ticket->getSubmittedOn()->format(DATE_ATOM),
-            'accepted_offer_id' => (string) $ticket->getAcceptedOfferId(),
+            'submitted_on' => $ticket->getSubmittedOn()->format('Y-m-d\TH:i:s'),
+            'accepted_offer_id' => $ticket->getAcceptedOfferId() ? (string) $ticket->getAcceptedOfferId() : null,
         ];
         $stmt->execute($data);
     }
