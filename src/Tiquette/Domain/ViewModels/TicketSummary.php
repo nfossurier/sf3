@@ -11,6 +11,7 @@ class TicketSummary
     public $eventName;
     public $eventDate;
     public $boughtAtPrice;
+    public $sellerNickname;
     public $priceCurrency;
     public $numberOfOffersMade;
 }

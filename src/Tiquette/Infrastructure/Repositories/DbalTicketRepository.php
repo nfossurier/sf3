@@ -92,12 +92,13 @@ SQL;
     public function findLatestSubmittedTickets(): array
     {
         $query =<<<SQL
-SELECT * FROM tickets t
+SELECT t.*, offer_count, m.nickname FROM tickets t
 LEFT JOIN (
 	SELECT t.uuid, IFNULL(COUNT(ticket_uuid), 0) AS offer_count FROM tickets t
 	LEFT JOIN offers o ON t.uuid = o.ticket_uuid
 	GROUP BY t.uuid
 ) tmp ON tmp.uuid = t.uuid
+INNER JOIN members m ON t.seller_id = m.uuid
 WHERE event_date >= NOW() AND accepted_offer_id IS NULL
 ORDER BY submitted_on DESC;
 SQL;
@@ -110,6 +111,7 @@ SQL;
         while ($row = $statement->fetch(\PDO::FETCH_ASSOC)) {
 
             $ticketSummary = new TicketSummary();
+            $ticketSummary->sellerNickname = $row['seller_nickname'];
             $ticketSummary->ticketId = $row['uuid'];
             $ticketSummary->boughtAtPrice = Price::inLowestSubunit($row['bought_at_price'], $row['price_currency']);
             $ticketSummary->eventDate = $row['event_date'];
@@ -124,12 +126,13 @@ SQL;
     public function findHotTickets(): array
     {
         $query =<<<SQL
-SELECT * FROM tickets t
+SELECT t.*, offer_count, m.nickname AS seller_nickname FROM tickets t
 LEFT JOIN (
 	SELECT t.uuid, IFNULL(COUNT(ticket_uuid), 0) AS offer_count FROM tickets t
 	LEFT JOIN offers o ON t.uuid = o.ticket_uuid
 	GROUP BY t.uuid
 ) tmp ON tmp.uuid = t.uuid
+INNER JOIN members m ON t.seller_id = m.uuid
 WHERE event_date >= NOW() AND accepted_offer_id IS NULL
 ORDER BY offer_count DESC;
 SQL;
@@ -143,6 +146,7 @@ SQL;
 
             $ticketSummary = new TicketSummary();
             $ticketSummary->ticketId = $row['uuid'];
+            $ticketSummary->sellerNickname = $row['seller_nickname'];
             $ticketSummary->boughtAtPrice = Price::inLowestSubunit($row['bought_at_price'], $row['price_currency']);
             $ticketSummary->eventDate = $row['event_date'];
             $ticketSummary->eventName = $row['event_name'];
