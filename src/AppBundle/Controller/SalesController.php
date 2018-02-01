@@ -46,19 +46,19 @@ class SalesController extends Controller
 
         $propositionTicketSubmission = new PropositionTicketSubmission();
 
-        $ticketPropositionForm = $this->createForm(PropositionTicketSubmissionType::class);
+        $propositionTicketForm = $this->createForm(PropositionTicketSubmissionType::class, $propositionTicketSubmission);
 
-        $ticketPropositionForm->handleRequest($request);
-        if ($ticketPropositionForm->isSubmitted() && $ticketPropositionForm->isValid()) {
-            $ticketProposition = $this->get('ticket_proposition_factory')->fromTicketPropositionSubmission($ticketPropositionSubmission);
-            $this->get('repositories.proposition')->save($ticketProposition);
+        $propositionTicketForm->handleRequest($request);
+        if ($propositionTicketForm->isSubmitted() && $propositionTicketForm->isValid()) {
+            $ticketProposition = $this->get('proposition_ticket_factory')->fromTicketPropositionSubmission($propositionTicketSubmission);
+            $this->get('repositories.proposition_ticket')->save($ticketProposition);
 
             return $this->redirectToRoute('ticket_submission_successful');
         }
 
         return $this->render('@App/Sales/ticket.html.twig', [
             'ticket' => $ticket,
-            'form'   => $ticketPropositionForm->createView()
+            'form'   => $propositionTicketForm->createView()
         ]);
     }
 }

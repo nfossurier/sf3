@@ -26,6 +26,7 @@
 
         <service id="ticket_factory" class="AppBundle\Utils\TicketFactory" />
 
+        <service id="proposition_ticket_factory" class="AppBundle\Utils\PropositionTicketFactory" />
 
         <service id="app.security.member_account_user_provider" class="AppBundle\Security\MemberAccountUserProvider">
             <argument type="service" id="repositories.member" />
